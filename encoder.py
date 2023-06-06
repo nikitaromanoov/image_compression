@@ -37,7 +37,7 @@ class Encoder(torch.nn.Module):
         return out
    
 
-quantification(l, B=2):
+def quantification(l, B=2):
     return [math.floor(i*2**B + 0.5) for i in l]
       
 transform = torchvision.transforms.Compose(
