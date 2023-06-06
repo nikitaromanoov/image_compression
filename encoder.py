@@ -209,7 +209,11 @@ print(dec_img)
 print(dec_img.shape)
 print(type(dec_img))
 
-img = Image.fromarray(dec_img.squeeze().permute(1,2,0).detach().numpy())
+
+transform = T.ToPILImage()
+
+img = transform(dec_img[0])
+
 img.save("photo.png")
 
 
