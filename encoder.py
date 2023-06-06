@@ -65,4 +65,4 @@ print(dec_img.shape)
 print(type(dec_img))
 print(dec_img)
 with open(args.path_result, "w") as w:
-    w.write(json.dumps(list(dec_img[0])))
+    w.write(json.dumps(dec_img.tolist()))
