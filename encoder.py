@@ -205,9 +205,8 @@ from PIL import Image
 
 
 
-transform = T.ToPILImage()
 
-img = transform(dec_img.squeeze().permute(1,2,0).detach().numpy())
+img = Image.fromarray(dec_img.squeeze().permute(1,2,0).detach().numpy())
 img.save("photo.png")
 
 
