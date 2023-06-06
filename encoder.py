@@ -12,6 +12,7 @@ import argparse
 
 from matplotlib import pyplot as plt
 import json
+import math
 
 
 class Encoder(torch.nn.Module):
@@ -35,7 +36,9 @@ class Encoder(torch.nn.Module):
         out = out.view(out.size(0), -1)
         return out
    
-    
+
+quantification(l, B=2):
+    return [math.floor(i*2**B + 0.5) for i in l]
       
 transform = torchvision.transforms.Compose(
         [
@@ -48,6 +51,7 @@ parser = argparse.ArgumentParser(description='')
 parser.add_argument("--path_encoder", type=str, default="./models/encoder.pth",  help= "path of encoder" )
 parser.add_argument("--path_image", type=str, default="./images/baboon.png",  help= "path of image" )
 parser.add_argument("--path_result", type=str, default="compressed.json",  help= "path of image" )
+parser.add_argument("--B", type=int, default=2,  help= "B" )
 
 
 args = parser.parse_args()
@@ -61,8 +65,14 @@ img_tensor = transform(image)
 dec_img = encoder(img_tensor.reshape(1,3,512,512))
 
 
+
+
 print(dec_img.shape)
 print(type(dec_img))
 print(dec_img)
+
+q = quantification(dec_img.tolist(), 2)
+
+
 with open(args.path_result, "w") as w:
-    w.write(json.dumps(dec_img.tolist()))
+    w.write(json.dumps(q))
