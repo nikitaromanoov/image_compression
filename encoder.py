@@ -205,6 +205,9 @@ from PIL import Image
 
 
 
+print(dec_img)
+print(dec_img.shape)
+print(type(dec_img))
 
 img = Image.fromarray(dec_img.squeeze().permute(1,2,0).detach().numpy())
 img.save("photo.png")
