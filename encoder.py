@@ -78,8 +78,8 @@ print(dec_img.shape)
 print(type(dec_img))
 print(dec_img)
 
-after_activation = torch.clamp(dec_img.tolist()[0], 0,1)
-q = quantification(after_activation, 2)
+after_activation = torch.clamp(dec_img[0], 0,1)
+q = quantification(after_activation.tolist(), 2)
 
 
 with open(args.path_result, "w") as w:
