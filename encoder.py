@@ -38,7 +38,7 @@ class Encoder(torch.nn.Module):
    
 
 def quantification(l, B=2):
-    return [math.floor(i*(2**B) + 0.5) for i in l[0]]
+    return [math.floor(i*(2**B) + 0.5) for i in l]
 
 
 def arithmetic_coding(q, mode=8):
