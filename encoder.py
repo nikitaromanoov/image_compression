@@ -84,8 +84,8 @@ print(type(dec_img))
 print(dec_img)
 
 after_activation = torch.clamp(dec_img[0], 0,1)
-q = quantification(after_activation.tolist(), 2)
-c = arithmetic_coding(q)
+q = quantification(after_activation.tolist(), args.B)
+c = arithmetic_coding(q, args.B)
 
 
 with open(args.path_result, "w") as w:
