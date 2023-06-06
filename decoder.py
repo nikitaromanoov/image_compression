@@ -12,53 +12,10 @@ import argparse
 
 from matplotlib import pyplot as plt
 
-
-
-class Encoder(torch.nn.Module):
-    def __init__(self):
-        super().__init__()
-        resnet = torchvision.models.resnet18(weights="DEFAULT")
-
-        self.conv1 = torch.nn.Sequential(resnet.conv1, resnet.bn1, resnet.relu, resnet.maxpool)
-        self.layer1 = resnet.layer1
-        self.layer2 = resnet.layer2
-        self.layer3 = resnet.layer3
-        self.layer4 = resnet.layer4
-    
-    def forward(self, x):
-        out = self.conv1(x)
-        out = self.layer1(out)
-        out = self.layer2(out)
-        out = self.layer3(out)
-        out = self.layer4(out)
-        out = torch.nn.functional.avg_pool2d(out, 2)
-        out = out.view(out.size(0), -1)
-        return out
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
+from arithmetic_compressor import AECompressor
+from arithmetic_compressor.models import\
+   BaseFrequencyTable,\
+   SimpleAdaptiveModel
     
 class type1(torch.nn.Module):
     def __init__(self, inp, out):
@@ -157,7 +114,14 @@ class Decoder(torch.nn.Module):
     
     
     
-    
+def dequantification(l, B=2):
+    return [i/(2** B) for i in l]
+
+def arithmetic_coding(q, l , B=2):
+    a_c = SimpleAdaptiveModel({k: 1. / (2 ** B) for k in [i for i in range(0, 2 ** B + 1)]})
+    coder = AECompressor(a_c)
+
+    return coder.decompress(q, l)  
     
     
     
@@ -176,21 +140,20 @@ parser = argparse.ArgumentParser(description='')
 parser.add_argument("--path_decoder", type=str, default="./models/decoder.pth",  help= "path of decoder" )
 parser.add_argument("--path_compressed", type=str, default="compressed.json",  help= "path of image" )
 parser.add_argument("--path_result", type=str, default="result.png",  help= "path of image" )
+parser.add_argument("--B", type=int, default=2,  help= "B" )
 
 
 args = parser.parse_args()
 
-
-encoder = Encoder()
-encoder.load_state_dict(torch.load(args.path_encoder))
-
-image = Image.open(args.path_image)
-img_tensor = transform(image) 
-dec_img = encoder(img_tensor.reshape(1,3,512,512))
-print(dec_img)
+with open(args.path_compressed) as f:
+    cod = json.loads(f.read())
+    
+e = dequantification(arithmetic_coding(cod[0], cod[1]))
 
 decoder = Decoder()
 decoder.load_state_dict(torch.load(args.path_decoder))
-dec_img = decoder(encoder(img_tensor.reshape(1,3,512,512)))
 
-torchvision.utils.save_image(dec_img, "result.png")
+qwer = decoder(torch.Tensor(e))
+
+torchvision.utils.save_image(qwer, arg.path_result)
+
