@@ -171,7 +171,8 @@ transform = torchvision.transforms.Compose(
 
 
 parser = argparse.ArgumentParser(description='')
-parser.add_argument("--path_model", type=str, default="./models/encoder.pth",  help= "path of encoder" )
+parser.add_argument("--path_encoder", type=str, default="./models/encoder.pth",  help= "path of encoder" )
+parser.add_argument("--path_decoder", type=str, default="./models/decoder.pth",  help= "path of decoder" )
 parser.add_argument("--path_image", type=str, default="./images/baboon.png",  help= "path of image" )
 
 
@@ -179,7 +180,7 @@ args = parser.parse_args()
 
 
 encoder = Encoder()
-encoder.load_state_dict(torch.load(args.path_model))
+encoder.load_state_dict(torch.load(args.path_encoder))
 
 image = Image.open(args.path_image)
 img_tensor = transform(image) 
@@ -187,7 +188,7 @@ dec_img = encoder(img_tensor.reshape(1,3,512,512))
 print(dec_img)
 
 decoder = Decoder()
-decoder.load_state_dict(torch.load("decoder.pth"))
+decoder.load_state_dict(torch.load(args.path_decoder))
 dec_img = decoder(encoder(img_tensor.reshape(1,3,512,512)))
 matplotlib.pyplot.imshow( dec_img.squeeze().permute(1,2,0).detach().numpy() )
 matplotlib.pyplot.show()
