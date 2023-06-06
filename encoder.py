@@ -63,4 +63,4 @@ dec_img = encoder(img_tensor.reshape(1,3,512,512))
 
 
 with open(args.path_result, "w") as w:
-    w.write(json.dumps(dec_img))
+    w.write(json.dump(dec_img))
