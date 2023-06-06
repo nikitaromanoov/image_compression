@@ -157,5 +157,5 @@ decoder.load_state_dict(torch.load(args.path_decoder))
 
 qwer = decoder(torch.Tensor(e))
 
-torchvision.utils.save_image(qwer, arg.path_result)
+torchvision.utils.save_image(qwer, args.path_result)
 
