@@ -117,7 +117,7 @@ class Decoder(torch.nn.Module):
 def dequantification(l, B=2):
     return [i/(2** B) for i in l]
 
-def arithmetic_coding(q, l , B=2):
+def arithmetic_decoding(q, l , B=2):
     a_c = SimpleAdaptiveModel({k: 1. / (2 ** B) for k in [i for i in range(0, 2 ** B + 1)]})
     coder = AECompressor(a_c)
 
@@ -148,7 +148,7 @@ args = parser.parse_args()
 with open(args.path_compressed) as f:
     cod = json.loads(f.read())
     
-e = dequantification(arithmetic_coding(cod[0], cod[1]))
+e = dequantification(arithmetic_decoding(cod[0], cod[1], args.B), args.B)
 
 decoder = Decoder()
 decoder.load_state_dict(torch.load(args.path_decoder))
