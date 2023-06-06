@@ -176,6 +176,7 @@ parser = argparse.ArgumentParser(description='')
 parser.add_argument("--path_encoder", type=str, default="./models/encoder.pth",  help= "path of encoder" )
 parser.add_argument("--path_decoder", type=str, default="./models/decoder.pth",  help= "path of decoder" )
 parser.add_argument("--path_image", type=str, default="./images/baboon.png",  help= "path of image" )
+parser.add_argument("--path_result", type=str, default="result.png",  help= "path of image" )
 
 
 args = parser.parse_args()
@@ -192,43 +193,5 @@ print(dec_img)
 decoder = Decoder()
 decoder.load_state_dict(torch.load(args.path_decoder))
 dec_img = decoder(encoder(img_tensor.reshape(1,3,512,512)))
-matplotlib.pyplot.imshow( dec_img.squeeze().permute(1,2,0).detach().numpy() )
 
-
-
-
-
-
-import torch
-import torchvision.transforms as T
-from PIL import Image
-
-
-
-print(dec_img)
-print(dec_img.shape)
-print(type(dec_img))
-
-
-transform = T.ToPILImage()
-
-img = transform(dec_img[0])
-
-img.save("photo.png")
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-#plt.savefig('foo.png')
-#matplotlib.pyplot.show()
+torchvision.utils.save_image(dec_img, "result.png")
