@@ -10,6 +10,8 @@ import matplotlib
 
 import argparse
 
+from matplotlib import pyplot as plt
+
 
 
 class Encoder(torch.nn.Module):
@@ -191,4 +193,6 @@ decoder = Decoder()
 decoder.load_state_dict(torch.load(args.path_decoder))
 dec_img = decoder(encoder(img_tensor.reshape(1,3,512,512)))
 matplotlib.pyplot.imshow( dec_img.squeeze().permute(1,2,0).detach().numpy() )
+
+plt.savefig('foo.png')
 matplotlib.pyplot.show()
