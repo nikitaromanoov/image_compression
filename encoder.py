@@ -14,6 +14,11 @@ from matplotlib import pyplot as plt
 import json
 import math
 
+from arithmetic_compressor import AECompressor
+from arithmetic_compressor.models import\
+   BaseFrequencyTable,\
+   SimpleAdaptiveModel
+
 
 class Encoder(torch.nn.Module):
     def __init__(self):
@@ -41,8 +46,8 @@ def quantification(l, B=2):
     return [math.floor(i*(2**B) + 0.5) for i in l]
 
 
-def arithmetic_coding(q, mode=8):
-    a_c = SimpleAdaptiveModel({k: 1. / (2 ** mode) for k in [i for i in range(0, 2 ** mode + 1)]})
+def arithmetic_coding(q, B=2):
+    a_c = SimpleAdaptiveModel({k: 1. / (2 **B) for k in [i for i in range(0, 2 ** B + 1)]})
     coder = AECompressor(a_c)
 
     return coder.compress(q), len(q)
@@ -80,7 +85,8 @@ print(dec_img)
 
 after_activation = torch.clamp(dec_img[0], 0,1)
 q = quantification(after_activation.tolist(), 2)
+c = arithmetic_coding(q)
 
 
 with open(args.path_result, "w") as w:
-    w.write(json.dumps(q))
+    w.write(json.dumps(c))
