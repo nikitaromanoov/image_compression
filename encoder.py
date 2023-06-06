@@ -11,7 +11,7 @@ import matplotlib
 import argparse
 
 from matplotlib import pyplot as plt
-
+import json
 
 
 class Encoder(torch.nn.Module):
