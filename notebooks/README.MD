@@ -1,2 +1,3 @@
-charts_and_analysis - создание графиков и запуск кода
-train
+charts-and-analysis.ipynb - создание графиков и запуск кода
+
+train.ipynb
