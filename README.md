@@ -28,4 +28,6 @@
 График сравнения предложенного алгоритма с  JPEG в виде кривых  PSI/BPP, где BPP(bits per pixel) - количество бит, затрачиваемое в среднем на один пиксель изображения для текстовых изображений.
 
 
+<img width="328" alt="image" src="https://github.com/nikitaromanoov/image_compression/assets/91135334/32fb7b9c-becb-4611-83e2-06353d0b7494">
 
+<img width="332" alt="image" src="https://github.com/nikitaromanoov/image_compression/assets/91135334/b64091ab-716d-4b8f-8741-d98e47d320f3">
