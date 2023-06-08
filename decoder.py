@@ -28,13 +28,11 @@ class type1(torch.nn.Module):
         self.conv2d_2 = torch.nn.Sequential(
                         torch.nn.Conv2d(out, out, kernel_size=3, stride=1, padding=1),
                         torch.nn.BatchNorm2d(out))
-        #self.shortcut = torch.nn.Sequential()
         self.relu = torch.nn.ReLU()
         
     def forward(self, x):
         out = self.conv2d_1(x)
         out = self.conv2d_2(out)
-        #out += self.shortcut(x)
         out = self.relu(out)
         return out
     
